@@ -149,4 +149,124 @@ public class TaskRepositoryTest {
 
         assertTrue(task.isEmpty());
     }
+
+    @Test
+    void saveTaskShouldReturnTask() {
+        Task newTask = Task.builder()
+                .title("test")
+                .description("test")
+                .status(TaskStatus.PENDING)
+                .priority(TaskPriority.LOW)
+                .build();
+
+        when(jdbcTemplate.queryForObject(eq(SAVE_TASK),
+                anyMap(),
+                any(RowMapper.class))).thenReturn(expectedTask1);
+
+        Task savedTask = repository.save(newTask);
+
+        assertNotNull(savedTask.getId());
+        assertEquals(expectedTask1, savedTask);
+    }
+
+    @Test
+    void updateTaskWhenExistsShouldReturnTask() {
+        expectedTask1.setTitle("Updated title");
+
+        when(jdbcTemplate.update(eq(UPDATE_TASK),
+                anyMap())).thenReturn(1);
+
+        when(jdbcTemplate.queryForObject(eq(FIND_TASK_BY_ID),
+                anyMap(),
+                any(RowMapper.class))).thenReturn(expectedTask1);
+
+        Optional<Task> updatedTask = repository.update(expectedTask1);
+
+        assertTrue(updatedTask.isPresent());
+        assertEquals(expectedTask1.getTitle(), updatedTask.get().getTitle());
+    }
+
+    @Test
+    void updateTaskWhenNotExistsShouldReturnOptionalEmpty() {
+        when(jdbcTemplate.update(eq(UPDATE_TASK),
+                anyMap())).thenReturn(0);
+
+        Optional<Task> updatedTask = repository.update(expectedTask1);
+
+        assertTrue(updatedTask.isEmpty());
+    }
+
+    @Test
+    void deleteTaskShouldReturnTrue() {
+        when(jdbcTemplate.update(eq(DELETE_TASK),
+                anyMap())).thenReturn(1);
+
+        boolean deleted = repository.delete(expectedTask1);
+
+        assertTrue(deleted);
+    }
+
+    @Test
+    void deleteTaskWhenNotExistsShouldReturnFalse() {
+        when(jdbcTemplate.update(eq(DELETE_TASK),
+                anyMap())).thenReturn(0);
+
+        boolean deleted = repository.delete(expectedTask1);
+
+        assertFalse(deleted);
+    }
+
+    @Test
+    void updateTaskPriorityShouldReturnTask() {
+        expectedTask1.setPriority(TaskPriority.HIGH);
+
+        when(jdbcTemplate.update(eq(UPDATE_TASK_PRIORITY),
+                anyMap())).thenReturn(1);
+
+        when(jdbcTemplate.queryForObject(eq(FIND_TASK_BY_ID),
+                anyMap(),
+                any(RowMapper.class))).thenReturn(expectedTask1);
+
+        Optional<Task> updatedTask = repository.updateTaskPriority(expectedTask1);
+
+        assertTrue(updatedTask.isPresent());
+        assertEquals(expectedTask1.getPriority(), updatedTask.get().getPriority());
+    }
+
+    @Test
+    void updateTaskPriorityWhenNotExistsShouldReturnOptionalEmpty() {
+        when(jdbcTemplate.update(eq(UPDATE_TASK_PRIORITY),
+                anyMap())).thenReturn(0);
+
+        Optional<Task> updatedTask = repository.updateTaskPriority(expectedTask1);
+
+        assertTrue(updatedTask.isEmpty());
+    }
+
+    @Test
+    void updateTaskStatusShouldReturnTask() {
+        expectedTask1.setStatus(TaskStatus.COMPLETED);
+
+        when(jdbcTemplate.update(eq(UPDATE_TASK_STATUS),
+                anyMap())).thenReturn(1);
+
+        when(jdbcTemplate.queryForObject(eq(FIND_TASK_BY_ID),
+                anyMap(),
+                any(RowMapper.class))).thenReturn(expectedTask1);
+
+        Optional<Task> updatedTask = repository.updateTaskStatus(expectedTask1);
+
+        assertTrue(updatedTask.isPresent());
+        assertEquals(expectedTask1.getStatus(), updatedTask.get().getStatus());
+    }
+
+    @Test
+    void updateTaskStatusWhenNotExistsShouldReturnOptionalEmpty() {
+        when(jdbcTemplate.update(eq(UPDATE_TASK_STATUS),
+                anyMap())).thenReturn(0);
+
+        Optional<Task> updatedTask = repository.updateTaskStatus(expectedTask1);
+
+        assertTrue(updatedTask.isEmpty());
+    }
 }
