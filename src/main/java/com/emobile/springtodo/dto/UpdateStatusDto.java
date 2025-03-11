@@ -15,6 +15,6 @@ import lombok.*;
 public class UpdateStatusDto {
 
     @NotNull(message = "Status can not be empty (Only PENDING, IN_PROGRESS, COMPLETED value)")
-    @Schema(description = "Статус задачи", allowableValues = {"PENDING", "IN_PROGRESS", "COMPLETED"})
+    @Schema(description = "Статус задачи")
     private TaskStatus status;
 }

@@ -15,6 +15,6 @@ import lombok.*;
 public class UpdatePriorityDto {
 
     @NotNull(message = "Priority can not be empty (Only LOW, MEDIUM, HIGH value)")
-    @Schema(description = "Приоритет задачи", allowableValues = {"LOW", "MEDIUM", "HIGH"})
+    @Schema(description = "Приоритет задачи")
     private TaskPriority priority;
 }

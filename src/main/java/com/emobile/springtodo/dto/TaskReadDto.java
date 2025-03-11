@@ -39,11 +39,11 @@ public class TaskReadDto implements Serializable {
 
     @JsonSerialize(using = EnumSerializer.class)
     @JsonDeserialize(using = TaskStatusDeserializer.class)
-    @Schema(description = "Статус задачи", allowableValues = {"PENDING", "IN_PROGRESS", "COMPLETED"})
+    @Schema(description = "Статус задачи")
     TaskStatus status;
 
     @JsonSerialize(using = EnumSerializer.class)
     @JsonDeserialize(using = TaskPriorityDeserializer.class)
-    @Schema(description = "Приоритет задачи", allowableValues = {"LOW", "MEDIUM", "HIGH"})
+    @Schema(description = "Приоритет задачи")
     TaskPriority priority;
 }

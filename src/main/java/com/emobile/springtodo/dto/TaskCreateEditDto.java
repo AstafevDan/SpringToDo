@@ -26,10 +26,10 @@ public class TaskCreateEditDto {
     private String description;
 
     @NotNull(message = "Status can not be empty (Only PENDING, IN_PROGRESS, COMPLETED value)")
-    @Schema(description = "Статус задачи", allowableValues = {"PENDING", "IN_PROGRESS", "COMPLETED"})
+    @Schema(description = "Статус задачи")
     private TaskStatus status;
 
     @NotNull(message = "Priority can not be empty (Only LOW, MEDIUM, HIGH value)")
-    @Schema(description = "Приоритет задачи", allowableValues = {"LOW", "MEDIUM", "HIGH"})
+    @Schema(description = "Приоритет задачи")
     private TaskPriority priority;
 }
