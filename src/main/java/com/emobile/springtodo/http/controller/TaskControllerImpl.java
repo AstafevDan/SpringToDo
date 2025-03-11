@@ -5,6 +5,7 @@ import com.emobile.springtodo.dto.TaskReadDto;
 import com.emobile.springtodo.dto.UpdatePriorityDto;
 import com.emobile.springtodo.dto.UpdateStatusDto;
 import com.emobile.springtodo.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,13 +38,13 @@ public class TaskControllerImpl implements TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<TaskReadDto> createTask(@RequestBody TaskCreateEditDto task) {
+    public ResponseEntity<TaskReadDto> createTask(@Valid @RequestBody TaskCreateEditDto task) {
         TaskReadDto createdTask = taskService.createTask(task);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskReadDto> updateTask(@PathVariable Long id, @RequestBody TaskCreateEditDto task) {
+    public ResponseEntity<TaskReadDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskCreateEditDto task) {
         TaskReadDto updatedTask = taskService.updateTask(id, task);
         return ResponseEntity.ok(updatedTask);
     }
@@ -55,13 +56,13 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<TaskReadDto> updateTaskStatus(@PathVariable Long id, @RequestBody UpdateStatusDto status) {
+    public ResponseEntity<TaskReadDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody UpdateStatusDto status) {
         TaskReadDto updatedTask = taskService.updateTaskStatus(id, status);
         return ResponseEntity.ok(updatedTask);
     }
 
     @PatchMapping("/{id}/priority")
-    public ResponseEntity<TaskReadDto> updateTaskPriority(@PathVariable Long id, @RequestBody UpdatePriorityDto priority) {
+    public ResponseEntity<TaskReadDto> updateTaskPriority(@PathVariable Long id, @Valid @RequestBody UpdatePriorityDto priority) {
         TaskReadDto updatedTask = taskService.updateTaskPriority(id, priority);
         return ResponseEntity.ok(updatedTask);
     }
