@@ -47,7 +47,7 @@ public class TaskRepositoryTest {
     private static final String SAVE_TASK = """
             INSERT INTO tasks (title, description, status, priority)
             VALUES (:title, :description, :status, :priority)
-            RETURNING *
+            RETURNING id, title, description, status, priority, created_at, last_modified_at
             """;
 
     private static final String UPDATE_TASK = """
