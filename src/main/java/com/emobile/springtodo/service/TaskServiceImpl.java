@@ -12,6 +12,10 @@ import com.emobile.springtodo.mapper.TaskReadMapper;
 import com.emobile.springtodo.model.Task;
 import com.emobile.springtodo.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,12 +32,14 @@ public class TaskServiceImpl implements TaskService {
     private final TaskReadMapper taskReadMapper;
     private final TaskCreateEditMapper taskCreateEditMapper;
 
+    @Cacheable(value = "tasks_by_page", key = "{#pageable.pageNumber, #pageable.pageSize, #pageable.sort}")
     @Override
     public Page<TaskReadDto> findAllTasksByPage(Pageable pageable) {
         return taskRepository.findAllByPage(pageable)
                 .map(taskReadMapper::map);
     }
 
+    @Cacheable(value = "tasks", key = "#id")
     @Override
     public TaskReadDto findTaskById(Long id) {
         return taskRepository.findById(id)
@@ -42,6 +48,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Transactional
+    @Caching(
+            put = @CachePut(value = "tasks", key = "#result.id"),
+            evict = @CacheEvict(value = "tasks_by_page", allEntries = true)
+    )
     @Override
     public TaskReadDto createTask(TaskCreateEditDto taskCreateEditDto) {
         return Optional.of(taskCreateEditDto)
@@ -52,6 +62,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Transactional
+    @CachePut(value = "tasks", key = "#id")
     @Override
     public TaskReadDto updateTask(Long id, TaskCreateEditDto taskCreateEditDto) {
         return taskRepository.findById(id)
@@ -65,6 +76,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "tasks", key = "#id"),
+                    @CacheEvict(value = "tasks_by_page", allEntries = true)
+            }
+    )
     @Override
     public boolean deleteTask(Long id) {
         return taskRepository.findById(id)
@@ -73,6 +90,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Transactional
+    @CachePut(value = "tasks", key = "#id")
     @Override
     public TaskReadDto updateTaskStatus(Long id, UpdateStatusDto status) {
         return taskRepository.findById(id)
@@ -86,6 +104,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Transactional
+    @CachePut(value = "tasks", key = "#id")
     @Override
     public TaskReadDto updateTaskPriority(Long id, UpdatePriorityDto priority) {
         return taskRepository.findById(id)
