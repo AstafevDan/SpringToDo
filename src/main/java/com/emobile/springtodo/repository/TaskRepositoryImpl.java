@@ -39,7 +39,7 @@ public class TaskRepositoryImpl implements TaskRepository {
     private static final String SAVE_TASK = """
             INSERT INTO tasks (title, description, status, priority)
             VALUES (:title, :description, :status, :priority)
-            RETURNING *
+            RETURNING id, title, description, status, priority, created_at, last_modified_at
             """;
 
     private static final String UPDATE_TASK = """
@@ -118,8 +118,8 @@ public class TaskRepositoryImpl implements TaskRepository {
         return jdbcTemplate.queryForObject(SAVE_TASK, Map.of(
                 "title", task.getTitle(),
                 "description", task.getDescription(),
-                "status", task.getStatus(),
-                "priority", task.getPriority()
+                "status", task.getStatus().name(),
+                "priority", task.getPriority().name()
         ), (rs, rowNum) -> Task.builder()
                 .id(rs.getLong("id"))
                 .title(rs.getString("title"))
@@ -136,8 +136,8 @@ public class TaskRepositoryImpl implements TaskRepository {
         int rowsAffected = jdbcTemplate.update(UPDATE_TASK, Map.of(
                 "title", task.getTitle(),
                 "description", task.getDescription(),
-                "status", task.getStatus(),
-                "priority", task.getPriority(),
+                "status", task.getStatus().name(),
+                "priority", task.getPriority().name(),
                 "id", task.getId()
         ));
 
@@ -154,7 +154,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Optional<Task> updateTaskPriority(Task task) {
-        int rowsAffected = jdbcTemplate.update(UPDATE_TASK_PRIORITY, Map.of("id", task.getId(), "priority", task.getPriority()));
+        int rowsAffected = jdbcTemplate.update(UPDATE_TASK_PRIORITY, Map.of("id", task.getId(), "priority", task.getPriority().name()));
 
         if (rowsAffected == 0) {
             return Optional.empty();
@@ -164,7 +164,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Optional<Task> updateTaskStatus(Task task) {
-        int rowsAffected = jdbcTemplate.update(UPDATE_TASK_STATUS, Map.of("id", task.getId(), "status", task.getStatus()));
+        int rowsAffected = jdbcTemplate.update(UPDATE_TASK_STATUS, Map.of("id", task.getId(), "status", task.getStatus().name()));
 
         if (rowsAffected == 0) {
             return Optional.empty();
