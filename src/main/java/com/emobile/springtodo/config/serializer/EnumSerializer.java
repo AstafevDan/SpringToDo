@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
+/**
+ * Класс, отвечающий за сериализацию Enum. Необходим для правильного хранения значений кэша в Redis.
+ */
 public class EnumSerializer extends JsonSerializer<Enum<?>> {
     @Override
     public void serialize(Enum<?> anEnum, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {

@@ -16,6 +16,9 @@ import java.time.Duration;
 
 import static org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair.*;
 
+/**
+ * Класс с конфигурацией Redis и кэширования.
+ */
 @Configuration
 public class RedisConfig {
 
@@ -36,9 +39,9 @@ public class RedisConfig {
                 .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
 
         objectMapper.activateDefaultTyping(
-          objectMapper.getPolymorphicTypeValidator(),
-          ObjectMapper.DefaultTyping.NON_FINAL,
-          JsonTypeInfo.As.PROPERTY
+                objectMapper.getPolymorphicTypeValidator(),
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY
         );
 
         return new GenericJackson2JsonRedisSerializer(objectMapper);

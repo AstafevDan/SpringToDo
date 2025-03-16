@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 import java.io.IOException;
 
+/**
+ * Класс, отвечающий за десериализацию {@link TaskPriority}.
+ */
 public class TaskPriorityDeserializer extends JsonDeserializer<Enum<?>> {
     @Override
     public Enum<?> deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {

@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Реализация {@link TaskRepository} с использованием {@link NamedParameterJdbcTemplate} для доступа к базе данных.
+ */
 @Repository
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepository {

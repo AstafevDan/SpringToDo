@@ -4,6 +4,9 @@ import com.emobile.springtodo.dto.TaskCreateEditDto;
 import com.emobile.springtodo.model.Task;
 import org.springframework.stereotype.Component;
 
+/**
+ * Класс для преобразования объекта типа {@link TaskCreateEditDto} в объект типа {@link Task}. Реализует интерфейс {@link Mapper}.
+ */
 @Component
 public class TaskCreateEditMapper implements Mapper<TaskCreateEditDto, Task> {
 

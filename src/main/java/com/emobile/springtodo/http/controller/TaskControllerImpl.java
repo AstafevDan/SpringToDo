@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Реализация {@link TaskController}.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/tasks")
@@ -21,6 +24,7 @@ public class TaskControllerImpl implements TaskController {
 
     private final TaskService taskService;
 
+    @Override
     @GetMapping
     public ResponseEntity<Page<TaskReadDto>> findTasks(@PageableDefault(
             size = 5,
@@ -30,12 +34,14 @@ public class TaskControllerImpl implements TaskController {
         return ResponseEntity.ok(allTasksByPage);
     }
 
+    @Override
     @GetMapping("/{id}")
     public ResponseEntity<TaskReadDto> findTaskById(@PathVariable Long id) {
         TaskReadDto task = taskService.findTaskById(id);
         return ResponseEntity.ok(task);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<TaskReadDto> createTask(@Valid @RequestBody TaskCreateEditDto task) {
@@ -43,24 +49,28 @@ public class TaskControllerImpl implements TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask);
     }
 
+    @Override
     @PutMapping("/{id}")
     public ResponseEntity<TaskReadDto> updateTask(@PathVariable Long id, @Valid @RequestBody TaskCreateEditDto task) {
         TaskReadDto updatedTask = taskService.updateTask(id, task);
         return ResponseEntity.ok(updatedTask);
     }
 
+    @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         return taskService.deleteTask(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
+    @Override
     @PatchMapping("/{id}/status")
     public ResponseEntity<TaskReadDto> updateTaskStatus(@PathVariable Long id, @Valid @RequestBody UpdateStatusDto status) {
         TaskReadDto updatedTask = taskService.updateTaskStatus(id, status);
         return ResponseEntity.ok(updatedTask);
     }
 
+    @Override
     @PatchMapping("/{id}/priority")
     public ResponseEntity<TaskReadDto> updateTaskPriority(@PathVariable Long id, @Valid @RequestBody UpdatePriorityDto priority) {
         TaskReadDto updatedTask = taskService.updateTaskPriority(id, priority);

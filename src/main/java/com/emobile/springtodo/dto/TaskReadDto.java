@@ -18,6 +18,9 @@ import lombok.Value;
 
 import java.io.Serializable;
 
+/**
+ * DTO для представления информации о задаче.
+ */
 @Value
 @Builder
 @NoArgsConstructor(force = true)
@@ -28,20 +31,35 @@ import java.io.Serializable;
 @Schema(description = "Сущность задачи")
 public class TaskReadDto implements Serializable {
 
+    /**
+     * Уникальный идентификатор задачи.
+     */
     @Schema(description = "Уникальный идентификатор задачи")
     Long id;
 
+    /**
+     * Заголовок задачи.
+     */
     @Schema(description = "Название задачи", example = "Title")
     String title;
 
+    /**
+     * Описание задачи.
+     */
     @Schema(description = "Описание задачи", example = "Something about task")
     String description;
 
+    /**
+     * Статус задачи.
+     */
     @JsonSerialize(using = EnumSerializer.class)
     @JsonDeserialize(using = TaskStatusDeserializer.class)
     @Schema(description = "Статус задачи")
     TaskStatus status;
 
+    /**
+     * Приоритет задачи.
+     */
     @JsonSerialize(using = EnumSerializer.class)
     @JsonDeserialize(using = TaskPriorityDeserializer.class)
     @Schema(description = "Приоритет задачи")
